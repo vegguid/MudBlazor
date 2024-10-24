@@ -1647,5 +1647,19 @@ namespace MudBlazor.UnitTests.Components
             comp.Find(inputSelector).GetAttribute("aria-describedby").Should().Be(secondExpectedAriaDescribedBy);
         }
 #nullable disable
+
+        [Test]
+        public async Task TextFieldWithMask_Should_FireOnKeyUpEvent()
+        {
+            var comp = Context.RenderComponent<MudTextField<string>>(parameters => parameters
+                .Add(p => p.Mask, new PatternMask("0000"))
+                .Add(p => p.OnKeyUp, EventCallback.Factory.Create<KeyboardEventArgs>(this, (e) => { })));
+
+            var input = comp.Find("input");
+            input.KeyUp(new KeyboardEventArgs { Key = "A" });
+
+            // Assert that the OnKeyUp event was fired
+            comp.Instance.OnKeyUp.HasDelegate.Should().BeTrue();
+        }
     }
 }

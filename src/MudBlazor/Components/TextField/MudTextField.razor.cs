@@ -217,7 +217,11 @@ namespace MudBlazor
 
         internal override InputType GetInputType() => InputType;
 
-        private Task OnMaskedValueChanged(string s) => SetTextAsync(s);
+        private Task OnMaskedValueChanged(string s)
+        {
+            SetTextAsync(s);
+            return InvokeKeyUpAsync(new KeyboardEventArgs());
+        }
 
         private string GetCounterText() => Counter switch
         {
